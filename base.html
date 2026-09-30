@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ app_name }}{% if comic %} — {{ comic.title }}{% endif %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/">ComicCraft</a>
+    <span class="badge">Generative AI Comic Studio</span>
+</header>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

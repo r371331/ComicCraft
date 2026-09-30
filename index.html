@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">AI STORY → ART → PDF</p>
+        <h1>Turn an idea into a comic.</h1>
+        <p class="subtitle">
+            Describe your story and ComicCraft will create connected panels,
+            dialogue, artwork, and a downloadable PDF.
+        </p>
+    </div>
+</section>
+
+<section class="card">
+    <form id="comic-form" method="post" action="/generate">
+        <div class="grid">
+            <label>
+                Title
+                <input name="title" value="The Last Robot" required>
+            </label>
+
+            <label>
+                Genre
+                <select name="genre">
+                    <option>Adventure</option>
+                    <option>Sci-Fi</option>
+                    <option>Fantasy</option>
+                    <option>Mystery</option>
+                    <option>Comedy</option>
+                </select>
+            </label>
+
+            <label>
+                Tone
+                <select name="tone">
+                    <option>Fun</option>
+                    <option>Hopeful</option>
+                    <option>Epic</option>
+                    <option>Dark</option>
+                    <option>Heartwarming</option>
+                </select>
+            </label>
+
+            <label>
+                Panels
+                <select name="panel_count">
+                    {% for n in range(2, 9) %}
+                    <option value="{{ n }}" {% if n == 6 %}selected{% endif %}>{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+
+        <label>
+            Story idea
+            <textarea name="idea" rows="5" required>A small robot discovers a lonely garden on Mars and decides to bring it back to life.</textarea>
+        </label>
+
+        <button id="generate-btn" type="submit">✨ Generate Comic</button>
+        <p id="status" class="status"></p>
+    </form>
+</section>
+
+{% if comic %}
+<section class="result">
+    <div class="result-header">
+        <div>
+            <p class="eyebrow">GENERATED COMIC</p>
+            <h2>{{ comic.title }}</h2>
+            <p>{{ comic.genre }} · {{ comic.tone }}</p>
+        </div>
+        <a class="button secondary" href="{{ comic.pdf_url }}">Download PDF</a>
+    </div>
+
+    <div class="comic-grid">
+        {% for panel in comic.panels %}
+        <article class="panel">
+            <img src="{{ panel.image_url }}" alt="Comic panel {{ panel.number }}">
+            <div class="panel-copy">
+                <strong>Panel {{ panel.number }}</strong>
+                <p>{{ panel.scene }}</p>
+                {% if panel.narration %}<p class="narration">{{ panel.narration }}</p>{% endif %}
+                {% if panel.dialogue %}<p class="dialogue">“{{ panel.dialogue }}”</p>{% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
